@@ -6,7 +6,7 @@
 /*   By: supersko <ndionis@student.42mulhouse.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 10:36:39 by supersko          #+#    #+#             */
-/*   Updated: 2022/03/16 16:12:32 by supersko         ###   ########.fr       */
+/*   Updated: 2022/03/16 17:37:40 by supersko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 	}
 }
 
-void	ft_lstdelone(t_list **lst, void (*del)(void *))
+void	ft_lstdelone(t_list **lst)
 {
 	if (lst)
 	{
@@ -47,16 +47,17 @@ t_list	*ft_lstnew(char *line)
 	return (new);
 }
 
-void	ft_lstclear(t_list **lst, void (*del)(void *))
+void	ft_lstclear(t_list **lst)
 {
 	t_list	*next_item;
 
-	if (lst && del)
+	if (lst)
 	{
 		while (*lst)
 		{
 			next_item = (*lst)->next;
-			ft_lstdelone(lst, del);
+			free((*lst)->line);
+			free(lst);
 			*lst = next_item;
 		}
 	}
