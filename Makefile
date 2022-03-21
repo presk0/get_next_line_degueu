@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRCS = *.c
+SRCS = ft_list.c get_next_line.c
 
 OBJS = ${SRCS:.c=.o}
 
@@ -38,12 +38,9 @@ re: fclean all
 
 test:
 	$(CC) $(SRCS) $(SRCS_BONUS) $(HEADER)
-	./a.out
-	rm a.out
 
 debug:
 	$(CC) -g $(SRCS) $(SRCS_BONUS) $(HEADER)
 	lldb a.out
-	rm a.out
 
 .PHONY: all clean fclean re
