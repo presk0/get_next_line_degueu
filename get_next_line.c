@@ -6,7 +6,7 @@
 /*   By: supersko <ndionis@student.42mulhouse.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 19:18:28 by supersko          #+#    #+#             */
-/*   Updated: 2022/03/17 11:38:14 by supersko         ###   ########.fr       */
+/*   Updated: 2022/03/22 14:35:50 by supersko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,33 +22,25 @@ unsigned int ft_strlen(char *s)
     return (ii);
 }
 
-size_t ft_strlcpy(char *dest, char *src, unsigned int size)
+void ft_strcpy(char *dest, char *src)
 {
-	unsigned int	count;
 	unsigned int	i;
 
-	count = 0;
-	while (src[count] != '\0')
-		++count;
 	i = 0;
-	while (src[i] != '\0' && i < (size - 1))
+	while (src[i] != '\0')
 	{
 		dest[i] = src[i];
 		++i;
 	}
 	dest[i] = '\0';
-	return (count);
 }
 
-size_t  ft_strlcat(char *dst, char *src, size_t dstsize)
+void  ft_strcat(char *dst, char *src)
 {
     size_t  dstr_len;
 
     dstr_len = ft_strlen(dst);
-    if (dstr_len == dstsize)
-        return (dstr_len + ft_strlen(src));
-    return (dstr_len + ft_strlcpy(dst + dstr_len,
-            (char *) src, dstsize - dstr_len));
+    ft_strcpy(dst + dstr_len, (char *) src);
 }
 
 void	ft_bzero(void *b, size_t n)
@@ -76,19 +68,19 @@ char	*ft_lst_to_str(t_list *item)
 {
 	size_t	len;
 	char	*ret;
-	t_list	*to_delete;
+	t_list	**to_delete;
 
+	to_delete = &item;
 	len = ft_lstsize(item);
 	ret = calloc(len, BUFFER_SIZE);
 	if (!ret)
 		return (NULL);
 	while (item != NULL)
 	{
-		ft_strlcat(ret, item->line, BUFFER_SIZE);
-		to_delete = item;
+		ft_strcat(ret, item->line);
 		item = item->next;
-		ft_lstdelone(&to_delete);
 	}
+	ft_lstclear(to_delete, free);
 	return (ret);
 }
 
@@ -108,21 +100,22 @@ char	*get_next_line(int fd)
 	if (BUFFER_SIZE != 0)
 	{
 		ii = 0;
+		new_str_link = str_link;
 		while (0 < read(fd, &c, 1))
 		{
 			if (c == '\n')
 				return (ft_lst_to_str(str_link));
 			else if (c == 0)
 				return (ft_lst_to_str(str_link));
-			else if (ii < BUFFER_SIZE - 1)
-				str_link->line[ii++] = c;
+			else if (ii < BUFFER_SIZE - 2)
+				new_str_link->line[ii++] = c;
 			else
 			{
+				new_str_link->line[ii] = c;
 				new_str_link = ft_lstnew(malloc(sizeof(BUFFER_SIZE)));
 				if (new_str_link == NULL)
 					return (NULL);
-				new_str_link->next = str_link;
-				str_link = new_str_link;
+				ft_lstadd_back(&str_link, new_str_link);
 				ii = 0;
 			}
 		}
@@ -132,14 +125,14 @@ char	*get_next_line(int fd)
 
 int main(int argc, char *argv[])
 {
-	/*
+/*
 	t_list	*n0;
 
 	n0 = ft_lstnew("voici une chaine");
 	ft_lstadd_back(&n0, ft_lstnew("une seconde"));
 	ft_lstadd_back(&n0, ft_lstnew("\n"));
 	printf("%s\n", ft_lst_to_str(n0));
-	*/
+*/
 	int fd;
 	char	*line;
 	int ii = 0;
@@ -152,7 +145,7 @@ int main(int argc, char *argv[])
 			line = get_next_line(fd);
 			while (line != NULL)
 			{
-				printf("ligne %d: %s\n", ii++, line);
+				printf("%s\n", line);
 				line = get_next_line(fd);
 			}
 		}
