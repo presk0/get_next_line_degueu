@@ -6,7 +6,7 @@
 /*   By: supersko <ndionis@student.42mulhouse.fr>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/05 15:17:56 by supersko          #+#    #+#             */
-/*   Updated: 2022/04/06 14:05:33 by supersko         ###   ########.fr       */
+/*   Updated: 2022/04/07 16:26:34 by supersko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ char	*get_next_line(int fd)
 	char	*line;
 	int		len;
 
-	if (!fd || fd < 0 || fd > MAX_FD)
-		return (NULL);
 	len = 0;
 	line = NULL;
 	while (1)
