@@ -15,13 +15,8 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
-# endif
 # undef BUFFER_SIZE
 # define BUFFER_SIZE 1
-# ifndef MAX_FD
-#  define MAX_FD 256
 # endif
 
 char	*get_next_line(int fd);
